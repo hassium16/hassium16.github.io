@@ -1,0 +1,11 @@
+attribute vec3 aVertexPos;
+attribute vec2 aTexCoord;
+
+varying vec2 vTexCoord;
+
+uniform mat4 uMV;
+
+void main(void){
+    vTexCoord = aTexCoord;
+    gl_Position = uMV * vec4(aVertexPos, 1.0);
+}

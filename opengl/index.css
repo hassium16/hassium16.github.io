@@ -1,0 +1,8 @@
+ol > li > a {
+    background: #000
+}
+
+.sidebar-module {
+    padding: 15px;
+    margin: 0 -15px 15px;
+}

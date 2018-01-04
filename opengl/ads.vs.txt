@@ -1,0 +1,40 @@
+attribute vec3 VertexPos;
+attribute vec3 Normal;
+attribute vec2 TexCoord;
+
+varying vec3 Color;
+
+uniform mat3 NormalMatrix;
+uniform mat4 MVMatrix;
+uniform mat4 MVP;
+
+uniform vec4 LightPos;
+uniform vec3 LightIntensity;
+
+uniform vec3 Kd;
+uniform vec3 Ka;
+uniform vec3 Ks;
+uniform float Shininess;
+
+vec3 ads(vec4 pos, vec3 norm){
+    vec3 s;
+    if(LightPos.w == 0.0)
+        s = normalize(vec3(LightPos));
+    else
+        s = normalize(vec3(LightPos - pos));
+
+    vec3 v = normalize(vec3(-pos));
+    vec3 r = reflect(-s, norm);
+
+    return LightIntensity * (Ka +
+        Kd * max(dot(s, norm), 0.0) +
+        Ks * pow(max(dot(r, v), 0.0), Shininess));
+}
+
+void main(void){
+    vec3 eyeNorm = normalize(NormalMatrix * Normal);
+    vec4 eyePos = MVMatrix * vec4(VertexPos, 1.0);
+
+    Color = ads(eyePos, eyeNorm);
+    gl_Position = MVP * vec4(VertexPos, 1.0);
+}
